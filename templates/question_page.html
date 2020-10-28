@@ -1,0 +1,17 @@
+{% extends 'inc/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="mb-5">
+        {% include 'inc/question_big.html' %}
+    </div>
+
+    {% include 'inc/question_answer.html' %}
+    {% include 'inc/question_answer.html' %}
+
+    <form>
+        <textarea class="form-control mr-5 pr-5" id="question" rows="6" placeholder="Enter your answer here"></textarea>
+        <button type="submit" id="confirm" class="btn mt-3 align-content-end btn-primary">Submit</button>
+    </form>
+{% endblock content %}

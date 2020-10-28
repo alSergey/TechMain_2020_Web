@@ -1,0 +1,38 @@
+{% extends 'inc/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <legend class="mb-3">
+        <h3 class="mr-3">New Question</h3>
+    </legend>
+
+    <form>
+        <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label mt-3"><h5>Title</h5></label>
+            <div class="col-sm-10 mt-3">
+                <input type="text" class="form-control" id="title">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="question" class="col-sm-2 col-form-label mt-3"><h5>Question</h5></label>
+            <div class="col-sm-10 mt-3">
+                <textarea class="form-control mr-5 pr-5" id="question" rows="6"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="tags" class="col-sm-2 col-form-label mt-3"><h5>Tags</h5></label>
+            <div class="col-sm-10 mt-3">
+                <input type="text" class="form-control" id="tags">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="confirm" class="col-sm-2 col-form-label mt-1"></label>
+            <div class="col-sm-10 mt-1">
+                <button type="submit" id="confirm" class="btn align-content-end btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock content %}

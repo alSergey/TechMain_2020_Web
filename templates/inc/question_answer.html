@@ -1,0 +1,28 @@
+{% extends 'inc/question_base.html' %}
+
+{% load static %}
+
+{% block question-avatar %}
+    <img src="{% static "img/quest.png" %}" height="95px" width="95px" class="align-self-start mr-2 rounded-sm"
+         alt="...">
+{% endblock question-avatar %}
+
+{% block question-answer %}
+    <h5 class="mt-0">Top-aligned media</h5>
+    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+        scelerisque ante sollicitudin. Cras purus odio,
+        vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.
+        Donec
+        lacinia congue felis in faucibus. Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+        scelerisque
+        ante sollicitudin. Cras purus odio,
+        vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.
+        Donec
+        lacinia congue felis in faucibus.
+    </p>
+{% endblock question-answer %}
+
+{% block question-info %}
+    <input class="form-check-input ml-3" type="checkbox" value="" id="defaultCheck1">
+    <label class="form-check-label ml-5" for="defaultCheck1">Correct!</label>
+{% endblock question-info %}

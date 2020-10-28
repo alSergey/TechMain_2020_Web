@@ -1,0 +1,22 @@
+{% load static %}
+
+<div class="media mb-4">
+    <div class="d-flex flex-column bd-highlight mb-3">
+        {% block question-avatar %}
+        {% endblock question-avatar %}
+        <div class="mt-3 align-self-center">
+            <a href="#" class=""><i class="far fa-thumbs-up"></i></a>
+            <span>1234</span>
+            <a href="#" class=""><i class="far fa-thumbs-down"></i></a>
+        </div>
+    </div>
+    <div class="media-body">
+        {% block question-answer %}
+        {% endblock question-answer %}
+
+        <div class="mt-n2">
+            {% block question-info %}
+            {% endblock question-info %}
+        </div>
+    </div>
+</div>

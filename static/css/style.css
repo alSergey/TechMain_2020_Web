@@ -1,0 +1,23 @@
+/* Custom page CSS
+-------------------------------------------------- */
+
+
+/* Not required for template or sticky footer method. */
+
+main>.container {
+    padding: 90px 15px 0;
+}
+
+code {
+    font-size: 80%;
+}
+
+.custom-file-label {
+    right: 2%;
+    left: 2%;
+}
+
+.right-sticky {
+    position: sticky;
+    top: 10%;
+}

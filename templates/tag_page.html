@@ -1,0 +1,20 @@
+{% extends 'inc/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <legend class="mb-3">
+        <h3>Tag: Tag</h3>
+    </legend>
+
+    {% include 'inc/question_main.html' %}
+    {% include 'inc/question_main.html' %}
+    {% include 'inc/question_main.html' %}
+    {% include 'inc/question_main.html' %}
+    {% include 'inc/question_main.html' %}
+    {% include 'inc/question_main.html' %}
+
+    {% include 'inc/paginator.html' %}
+
+{% endblock content %}

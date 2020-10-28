@@ -1,0 +1,57 @@
+{% extends 'inc/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <legend class="mb-3">
+         <h3 class="mr-3">Sing Up</h3>
+    </legend>
+
+    <form>
+        <div class="form-group row">
+            <label for="login" class="col-sm-2 col-form-label mt-3"><h5>Login</h5></label>
+            <div class="col-sm-10 mt-3">
+                <input type="text" class="form-control" id="login">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label mt-3"><h5>Email</h5></label>
+            <div class="col-sm-10 mt-3">
+                <input type="email" class="form-control" id="email">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="nick" class="col-sm-2 col-form-label mt-3"><h5>NickName</h5></label>
+            <div class="col-sm-10 mt-3">
+                <input type="text" class="form-control" id="nick">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password1" class="col-sm-2 col-form-label mt-3"><h5>Password</h5></label>
+            <div class="col-sm-10 mt-3">
+                <input type="text" class="form-control" id="password1">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="password2" class="col-sm-2 col-form-label mt-3"><h5>Password</h5></label>
+            <div class="col-sm-10 mt-3">
+                <input type="text" class="form-control" id="password2">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="photo" class="col-sm-2 col-form-label mt-3"><h5>Photo</h5></label>
+            <div class="col-sm-10 mt-3">
+                <input type="file" class="custom-file-input" id="photo">
+                <label class="custom-file-label" for="photo">Choose file</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="confirm" class="col-sm-2 col-form-label mt-1"></label>
+            <div class="col-sm-10 mt-1">
+                <button type="submit" id="confirm" class="btn align-content-end btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock content %}
