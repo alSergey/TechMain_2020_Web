@@ -4,11 +4,14 @@
 
 {% block content %}
     <div class="mb-5">
-        {% include 'inc/question_big.html' %}
+        {% for question in questions %}
+            {% include 'inc/question_big.html' %}
+        {% endfor %}
     </div>
 
-    {% include 'inc/question_answer.html' %}
-    {% include 'inc/question_answer.html' %}
+    {#    {% for question in questions %}#}
+    {#        {% include 'inc/question_answer.html' %}#}
+    {#    {% endfor %}#}
 
     <form>
         <textarea class="form-control mr-5 pr-5" id="question" rows="6" placeholder="Enter your answer here"></textarea>

@@ -8,24 +8,15 @@
 {% endblock question-avatar %}
 
 {% block question-answer %}
-    <h5 class="mt-0">Top-aligned media</h5>
-    <p class="overflow-hidden" style="height: 70px">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-        scelerisque ante sollicitudin. Cras purus odio,
-        vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.
-        Donec
-        lacinia congue felis in faucibus. Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-        scelerisque
-        ante sollicitudin. Cras purus odio,
-        vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.
-        Donec
-        lacinia congue felis in faucibus.
-    </p>
+    <h5 class="mt-0">{{ question.title }}</h5>
+    <p class="overflow-hidden" style="height: 70px">{{ question.text }}</p>
 {% endblock question-answer %}
 
 {% block question-info %}
-    <a href="{% url 'question' %}">answer (3)</a>
+    <a href="{% url 'question' id=question.id %}">answer ({{ question.answer }})</a>
     <span>Tags:
-        <a href="{% url 'tag' %}">tag1</a>
-        <a href="{% url 'tag' %}">tag2</a>
+        {% for tag in question.tags %}
+            <a href="{% url 'tag' tag=tag %}">{{ tag }}</a>
+        {% endfor %}
     </span>
 {% endblock question-info %}

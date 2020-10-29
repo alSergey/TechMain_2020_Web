@@ -5,16 +5,18 @@
 {% block content %}
 
     <legend class="mb-3">
-        <a href="#" class="mr-3">New Questions</a>
-        <a href="#">Hot Questions</a>
+        <h2 class="d-inline mr-3">{{ title }}</h2>
+        {% if title == 'New questions' %}
+            <a href="{% url 'hot' %}">Hot Questions</a>
+        {% endif %}
+        {% if title == 'Hot questions' %}
+            <a href="{% url 'index' %}">New Questions</a>
+        {% endif %}
     </legend>
 
-    {% include 'inc/question_main.html' %}
-    {% include 'inc/question_main.html' %}
-    {% include 'inc/question_main.html' %}
-    {% include 'inc/question_main.html' %}
-    {% include 'inc/question_main.html' %}
-    {% include 'inc/question_main.html' %}
+    {% for question in questions %}
+        {% include 'inc/question_main.html' %}
+    {% endfor %}
 
     {% include 'inc/paginator.html' %}
 
