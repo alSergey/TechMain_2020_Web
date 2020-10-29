@@ -6,6 +6,8 @@ tags_users = {
     'users': ['mr greeman', 'dr house', 'bender', 'queen victoria', 'pupkin'],
 }
 
+user = True
+
 
 def pagination(object_list, request, per_page=10):
     p = request.GET.get('page')
@@ -100,6 +102,7 @@ def findId(val, id):
 def index(request):
     return render(request, 'index.html', {
         'title': 'New questions',
+        'user_login': user,
         'questions': pagination(questions, request),
         **tags_users
     })
@@ -108,6 +111,7 @@ def index(request):
 def hot_questions(request):
     return render(request, 'index.html', {
         'title': 'Hot questions',
+        'user_login': user,
         'questions': pagination(questions, request),
         **tags_users
     })
@@ -116,6 +120,7 @@ def hot_questions(request):
 def new_question(request):
     return render(request, 'new_question_page.html', {
         'title': 'New question',
+        'user_login': user,
         **tags_users
     })
 
@@ -123,6 +128,7 @@ def new_question(request):
 def question(request, id):
     return render(request, 'question_page.html', {
         'title': f'question {id}',
+        'user_login': user,
         'questions': findId(questions, id),
         **tags_users
     })
@@ -131,6 +137,7 @@ def question(request, id):
 def tag(request, tag):
     return render(request, 'index.html', {
         'title': f'Tag: {tag}',
+        'user_login': user,
         'questions': pagination(findTag(questions, tag), request),
         **tags_users
     })
@@ -139,6 +146,7 @@ def tag(request, tag):
 def settings(request):
     return render(request, 'settings_page.html', {
         'title': 'Settings',
+        'user_login': True,
         **tags_users
     })
 
@@ -146,6 +154,7 @@ def settings(request):
 def sing_in(request):
     return render(request, 'sing_in_page.html', {
         'title': 'Sing In',
+        'user_login': False,
         **tags_users
     })
 
@@ -153,5 +162,6 @@ def sing_in(request):
 def sing_up(request):
     return render(request, 'sing_up_page.html', {
         'title': 'Sing Up',
+        'user_login': False,
         **tags_users
     })
