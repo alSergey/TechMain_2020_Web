@@ -1,9 +1,25 @@
 from django.shortcuts import render
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 tags_users = {
     'tags': ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8'],
     'users': ['mr greeman', 'dr house', 'bender', 'queen victoria', 'pupkin'],
 }
+
+
+def pagination(object_list, request, per_page=10):
+    p = request.GET.get('page')
+    paginator = Paginator(object_list, per_page)
+
+    try:
+        content = paginator.page(p)
+    except PageNotAnInteger:
+        content = paginator.page(1)
+    except EmptyPage:
+        content = paginator.page(paginator.num_pages)
+
+    return content
+
 
 questions = []
 for i in range(1, 20):
@@ -74,20 +90,17 @@ def findTag(val, tag1):
 
 def findId(val, id):
     content = []
-    print(val)
-    print(id)
     for question in val:
         if question['id'] == id:
             content.append(question)
 
-    print(content)
     return content
 
 
 def index(request):
     return render(request, 'index.html', {
         'title': 'New questions',
-        'questions': questions,
+        'questions': pagination(questions, request),
         **tags_users
     })
 
@@ -95,7 +108,7 @@ def index(request):
 def hot_questions(request):
     return render(request, 'index.html', {
         'title': 'Hot questions',
-        'questions': questions,
+        'questions': pagination(questions, request),
         **tags_users
     })
 
@@ -108,7 +121,6 @@ def new_question(request):
 
 
 def question(request, id):
-    print(id)
     return render(request, 'question_page.html', {
         'title': f'question {id}',
         'questions': findId(questions, id),
@@ -119,7 +131,7 @@ def question(request, id):
 def tag(request, tag):
     return render(request, 'index.html', {
         'title': f'Tag: {tag}',
-        'questions': findTag(questions, tag),
+        'questions': pagination(findTag(questions, tag), request),
         **tags_users
     })
 
