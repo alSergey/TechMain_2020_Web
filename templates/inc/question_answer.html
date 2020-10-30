@@ -2,17 +2,19 @@
 
 {% load static %}
 
-{% block question-avatar %}
-    <img src="{% static "img/quest.png" %}" height="95px" width="95px" class="align-self-start mr-2 rounded-sm"
-         alt="...">
-{% endblock question-avatar %}
+{% block question-raiting %}
+    <span>{{ answer.rating }}</span>
+{% endblock question-raiting %}
 
-{% block question-answer %}
-    <h5 class="mt-0">{{ question.title }}</h5>
-    <p>{{ question.text }}</p>
-{% endblock question-answer %}
+{% block question-text %}
+    <div class="mb-2 mt-n2">
+        <span class="mr-2 text-black-50">{{ answer.author }}</span>
+        <span class="text-black-50">{{ answer.date }}</span>
+    </div>
+    <p>{{ answer.text }}</p>
+{% endblock question-text %}
 
 {% block question-info %}
-    <input class="form-check-input ml-3" type="checkbox" value="" id="defaultCheck1">
-    <label class="form-check-label ml-5" for="defaultCheck1">Correct!</label>
+    <input class="form-check-input ml-3" type="checkbox" value="" id="answerCheck">
+    <label class="form-check-label ml-5" for="answerCheck">Correct!</label>
 {% endblock question-info %}

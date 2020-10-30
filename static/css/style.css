@@ -1,11 +1,14 @@
-/* Custom page CSS
--------------------------------------------------- */
-
-
-/* Not required for template or sticky footer method. */
-
-main>.container {
+main > .container {
     padding: 90px 15px 0;
+}
+
+.footer {
+    background-color: #f5f5f5;
+}
+
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 code {
@@ -20,4 +23,12 @@ code {
 .right-sticky {
     position: sticky;
     top: 10%;
+}
+
+.max-question-height {
+    max-height: 70px;
+}
+
+.max-search-width {
+    width: 700px !important;
 }

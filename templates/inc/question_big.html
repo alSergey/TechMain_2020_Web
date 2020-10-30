@@ -7,10 +7,14 @@
          alt="...">
 {% endblock question-avatar %}
 
-{% block question-answer %}
+{% block question-text %}
     <h5 class="mt-0">{{ question.title }}</h5>
+    <div class="mb-2 mt-n2">
+        <span class="mr-2 text-black-50">{{ question.author }}</span>
+        <span class="text-black-50">{{ question.date }}</span>
+    </div>
     <p>{{ question.text }}</p>
-{% endblock question-answer %}
+{% endblock question-text %}
 
 {% block question-info %}
     <span>Tags:

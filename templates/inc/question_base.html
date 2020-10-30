@@ -2,20 +2,41 @@
 
 <div class="media mb-4">
     <div class="d-flex flex-column bd-highlight mb-3">
+
         {% block question-avatar %}
+            <img src="{% static "img/quest.png" %}" height="95px" width="95px" class="align-self-start mr-2 rounded-sm"
+                 alt="...">
         {% endblock question-avatar %}
+
         <div class="mt-3 align-self-center">
+
             <a href="#" class=""><i class="far fa-thumbs-up"></i></a>
-            <span>{{ question.rating }}</span>
+            {% block question-raiting %}
+                <span>{{ question.rating }}</span>
+            {% endblock question-raiting %}
             <a href="#" class=""><i class="far fa-thumbs-down"></i></a>
+
         </div>
     </div>
+
     <div class="media-body">
-        {% block question-answer %}
-        {% endblock question-answer %}
+        {% block question-text %}
+            <h5 class="mt-0"><a href="{% url 'question' id=question.id %}">{{ question.title }}</a></h5>
+            <div class="mb-2 mt-n2">
+                <span class="mr-2 text-black-50">{{ question.author }},</span>
+                <span class="text-black-50">{{ question.date }}</span>
+            </div>
+            <p class="overflow-hidden max-question-height">{{ question.text }}</p>
+        {% endblock question-text %}
 
         <div class="mt-n2">
             {% block question-info %}
+                <a href="{% url 'question' id=question.id %}">answer ({{ question.answer }})</a>
+                <span>Tags:
+                    {% for tag in question.tags %}
+                        <a href="{% url 'tag' tag=tag %}">{{ tag }}</a>
+                    {% endfor %}
+                </span>
             {% endblock question-info %}
         </div>
     </div>

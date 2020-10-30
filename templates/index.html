@@ -15,9 +15,9 @@
     </legend>
 
     {% for question in questions %}
-        {% include 'inc/question_main.html' %}
+        {% include 'inc/question_base.html' %}
     {% endfor %}
 
-    {% include 'inc/paginator.html' %}
+    {% include 'inc/paginator.html' with page=questions %}
 
 {% endblock content %}
