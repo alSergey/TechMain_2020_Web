@@ -18,9 +18,7 @@
 
 <body class="d-flex flex-column h-100">
 
-<header>
-    {% include 'inc/navbar.html' %}
-</header>
+{% include 'inc/header.html' %}
 
 <main role="main" class="flex-shrink-0 mb-3">
     <div class="container">
@@ -36,15 +34,7 @@
     </div>
 </main>
 
-<footer class="footer mt-auto py-3">
-    <div class="container">
-        <h5 class="ml-5 my-auto d-inline">TechnoForum</h5>
-        <h6 class="mx-auto my-auto mr-5 d-inline">copyright</h6>
-        <a href="https://github.com/alSergey"><i class="fab fa-github"></i></a>
-        <a href="https://gitlab.com/a.sergey"><i class="fab fa-gitlab"></i></a>
-        <a href="https://t.me/alekhin_sergey"><i class="fab fa-telegram"></i></a>
-    </div>
-</footer>
+{% include 'inc/footer.html' %}
 
 <script src="{% static "js/jquery.slim.min.js" %}"></script>
 <script src="{% static "js/popper.min.js" %}"></script>

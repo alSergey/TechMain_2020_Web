@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 tags_users = {
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8'],
-    'users': ['mr greeman', 'dr house', 'bender', 'queen victoria', 'pupkin'],
+    'best_tags': ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8'],
+    'best_users': ['mr greeman', 'dr house', 'bender', 'queen victoria', 'pupkin'],
 }
 
 user = True

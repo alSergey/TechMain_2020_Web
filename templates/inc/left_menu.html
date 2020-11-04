@@ -1,13 +1,13 @@
 <div class="container right-sticky">
     <div>
         <h5>Popular tags:</h5>
-        {% for tag in tags %}
+        {% for tag in best_tags %}
             <a href="{% url 'tag' tag=tag %}" class="badge mb-2">{{ tag }}</a>
         {% endfor %}
     </div>
     <div>
         <h5>User top:</h5>
-        {% for user in users %}
+        {% for user in best_users %}
             <a href="#" class="d-block mb-1">{{ user }}</a>
         {% endfor %}
     </div>
