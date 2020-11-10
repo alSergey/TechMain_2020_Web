@@ -18,7 +18,7 @@
 
 {% block question-info %}
     <span>Tags:
-        {% for tag in question.tags %}
+        {% for tag in question.all_tags %}
             <a href="{% url 'tag' tag=tag %}">{{ tag }}</a>
         {% endfor %}
     </span>

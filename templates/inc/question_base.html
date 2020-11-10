@@ -31,9 +31,9 @@
 
         <div class="mt-n2">
             {% block question-info %}
-                <a href="{% url 'question' id=question.id %}">answer ({{ question.answer }})</a>
+                <a href="{% url 'question' id=question.id %}">answer ({{ question.answers_count }})</a>
                 <span>Tags:
-                    {% for tag in question.tags %}
+                    {% for tag in question.all_tags %}
                         <a href="{% url 'tag' tag=tag %}">{{ tag }}</a>
                     {% endfor %}
                 </span>
