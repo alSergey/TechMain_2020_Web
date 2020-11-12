@@ -109,13 +109,27 @@ class Answer(models.Model):
         verbose_name_plural = 'Ответы'
 
 
-class LikeQuestion(models.Manager):
+class LikeQuestion(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Пользователь, который поставил отметку')
-    state = models.NullBooleanField(default=None, verbose_name='Состояние отметки')
+    state = models.BooleanField(null=True, verbose_name='Состояние отметки')
     question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='Вопрос')
 
+    def __str__(self):
+        return 'Отметка вопроса: {}'.format(self.question.title)
 
-class LikeAnswer(models.Manager):
+    class Meta:
+        verbose_name = 'Отметка вопроса'
+        verbose_name_plural = 'Отметки вопросов'
+
+
+class LikeAnswer(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Пользователь, который поставил отметку')
-    state = models.NullBooleanField(default=None, verbose_name='Состояние отметки')
+    state = models.BooleanField(null=True, verbose_name='Состояние отметки')
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, verbose_name='Ответ')
+
+    def __str__(self):
+        return 'Отметка ответа на вопрос: {}'.format(self.answer.question.title)
+
+    class Meta:
+        verbose_name = 'Отметка ответа'
+        verbose_name_plural = 'Отметки ответов'
