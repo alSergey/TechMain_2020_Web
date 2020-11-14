@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from app.models import Question, Answer, Tag, Profile, LikeQuestion, LikeAnswer
 from django.contrib.auth.models import User
 from random import randint, choice, choices
+from itertools import islice
 from faker import Faker
 
 f = Faker()
@@ -24,164 +25,189 @@ class Command(BaseCommand):
         parser.add_argument('--likes_questions', type=int, help='Questions likes count')
         parser.add_argument('--likes_answers', type=int, help='Answers likes count')
 
+    def bulk_create(self, Obj, objs):
+        batch_size = 10000
+
+        while True:
+            batch = list(islice(objs, batch_size))
+            if not batch:
+                break
+            Obj.objects.bulk_create(batch, batch_size)
+
     def fill_users(self, cnt):
         if cnt is None:
             return False
 
-        print('Filling {} users'.format(cnt))
+        print('Start filling {} users'.format(cnt))
+        objs = (
+            User(username=f.name() + str(i), email=f.email())
+            for i in range(cnt)
+        )
+        self.bulk_create(User, objs)
+        print('End filling users')
 
-        for i in range(cnt):
-            user = User.objects.create(username=f.name() + str(i), email=f.email())
-            Profile.objects.create(user=user)
+        print('Start filling {} profiles'.format(cnt))
+        users_id = list(User.objects.values_list('id', flat=True))
+        objs = (
+            Profile(user_id=users_id[i])
+            for i in range(cnt)
+        )
+        self.bulk_create(Profile, objs)
+        print('End filling profiles')
 
     def fill_tags(self, cnt):
         if cnt is None:
             return False
 
-        print('Filling {} tags'.format(cnt))
-
-        for i in range(cnt):
-            Tag.objects.create(name=f.word() + str(i))
+        print('Start filling {} tags'.format(cnt))
+        objs = (
+            Tag(name=f.word() + str(i))
+            for i in range(cnt)
+        )
+        self.bulk_create(Tag, objs)
+        print('End filling tags')
 
     def fill_questions(self, cnt):
         if cnt is None:
             return False
 
-        print('Filling {} questions'.format(cnt))
+        print('Start filling {} questions'.format(cnt))
+        authors_id = list(Profile.objects.values_list('id', flat=True))
+        objs = (
+            Question(title=f.sentence()[:128], author_id=choice(authors_id), text=f.text())
+            for i in range(cnt)
+        )
+        self.bulk_create(Question, objs)
+        print('End filling questions')
 
-        authors = list(Profile.objects.values_list('id', flat=True))
-        tags = list(Tag.objects.values_list('id', flat=True))
-        tags_count = dict.fromkeys(tags, 0)
+        print('Start filling {} question tags'.format(cnt))
+        tags_id = list(Tag.objects.values_list('id', flat=True))
+        tags_count = dict.fromkeys(tags_id, 0)
 
-        for i in range(cnt):
-            question = Question.objects.create(title=f.sentence()[:128],
-                                               author_id=choice(authors),
-                                               text=f.text())
+        for item in Question.objects.all():
+            for j in set(choices(tags_id, k=randint(1, 7))):
+                tags_count[j] += 1
+                item.tags.add(j)
 
-            for i in set(choices(tags, k=randint(1, 7))):
-                tags_count[i] += 1
-                question.tags.add(i)
+        print('End filling question tags')
 
-            question.save()
+        print('Start updating {} tags'.format(len(tags_id)))
+        tags = list(Tag.objects.all())
+        for tag in tags:
+            tag.count = tags_count[tag.pk]
 
-        for tag, count in tags_count.items():
-            if count != 0:
-                Tag.objects.filter(pk=tag).update(count=count)
+        Tag.objects.bulk_update(tags, ['count'])
+        print('End updating tags')
 
     def fill_answers(self, cnt):
         if cnt is None:
             return False
 
-        print('Filling {} answers'.format(cnt))
+        print('Start filling {} answers'.format(cnt))
+        questions_id = list(Question.objects.values_list('id', flat=True))
+        authors_id = list(Profile.objects.values_list('id', flat=True))
+        authors_rand = choices(authors_id, k=cnt)
+        objs = (
+            Answer(question_id=choice(questions_id), author_id=authors_rand[i], text=f.text())
+            for i in range(cnt)
+        )
+        self.bulk_create(Answer, objs)
+        print('End filling answers')
 
-        authors = list(Profile.objects.values_list('id', flat=True))
-        questions = list(Question.objects.values_list('id', flat=True))
-        authors_count = dict.fromkeys(authors, 0)
+        print('Start updating {} authors'.format(len(authors_id)))
+        authors_count = dict.fromkeys(authors_id, 0)
+        for i in authors_rand:
+            authors_count[i] += 1
 
-        for i in range(cnt):
-            author = choice(authors)
-            Answer.objects.create(question_id=choice(questions),
-                                  author_id=author,
-                                  text=f.text())
+        authors = list(Profile.objects.all())
+        for author in authors:
+            author.count = authors_count[author.pk]
 
-            authors_count[author] += 1
-
-        for author, count in authors_count.items():
-            if count != 0:
-                Profile.objects.filter(pk=author).update(count=count)
+        Profile.objects.bulk_update(authors, ['count'])
+        print('End updating authors')
 
     def fill_likes_questions(self, cnt):
         if cnt is None:
             return False
 
-        print('Filling {} questions likes'.format(cnt))
+        print('Start filling {} questions likes'.format(cnt))
+        authors_id = list(Profile.objects.values_list('id', flat=True))
+        questions_id = list(Question.objects.values_list('id', flat=True))
+        questions_rand = choices(questions_id, k=cnt)
+        mark_rand = choices([True, True, True, True, False], k=cnt)
+        objs = (
+            LikeQuestion(user_id=choice(authors_id), state=mark_rand[i], question_id=questions_rand[i])
+            for i in range(cnt)
+        )
+        self.bulk_create(LikeQuestion, objs)
+        print('End filling questions likes')
 
-        authors = list(Profile.objects.values_list('id', flat=True))
-        questions = list(Question.objects.values_list('id', flat=True))
-        question_rating = dict.fromkeys(questions, 0)
-
-        for i in range(cnt):
-            author = choice(authors)
-            question = choice(questions)
-            mark = choice([True, True, True, True, False])
-            LikeQuestion.objects.create(user_id=author,
-                                        state=mark,
-                                        question_id=question)
-            if mark:
-                question_rating[question] += 1
+        print('Start updating {} questions rating'.format(len(questions_id)))
+        questions_count = dict.fromkeys(questions_id, 0)
+        for i in range(len(questions_rand)):
+            if mark_rand[i]:
+                questions_count[questions_rand[i]] += 1
             else:
-                question_rating[question] -= 1
+                questions_count[questions_rand[i]] -= 1
 
-        for question, rating in question_rating.items():
-            if rating != 0:
-                Question.objects.filter(pk=question).update(rating=rating)
+        questions = list(Question.objects.all())
+        for question in questions:
+            question.rating = questions_count[question.pk]
+
+        Question.objects.bulk_update(questions, ['rating'])
+        print('End updating questions rating')
 
     def fill_likes_answers(self, cnt):
         if cnt is None:
             return False
 
-        print('Filling {} answers likes'.format(cnt))
+        print('Start filling {} answers likes'.format(cnt))
+        authors_id = list(Profile.objects.values_list('id', flat=True))
+        answers_id = list(Answer.objects.values_list('id', flat=True))
+        answers_rand = choices(answers_id, k=cnt)
+        mark_rand = choices([True, True, True, True, False], k=cnt)
+        objs = (
+            LikeAnswer(user_id=choice(authors_id), state=mark_rand[i], answer_id=answers_rand[i])
+            for i in range(cnt)
+        )
+        self.bulk_create(LikeAnswer, objs)
+        print('End filling answers likes')
 
-        authors = list(Profile.objects.values_list('id', flat=True))
-        answers = list(Answer.objects.values_list('id', flat=True))
-        answers_rating = dict.fromkeys(answers, 0)
-
-        for i in range(cnt):
-            author = choice(authors)
-            answer = choice(answers)
-            mark = choice([True, True, True, True, False])
-            LikeAnswer.objects.create(user_id=author,
-                                      state=mark,
-                                      answer_id=answer)
-            if mark:
-                answers_rating[answer] += 1
+        print('Start updating {} answers rating'.format(len(answers_id)))
+        answers_count = dict.fromkeys(answers_id, 0)
+        for i in range(len(answers_rand)):
+            if mark_rand[i]:
+                answers_count[answers_rand[i]] += 1
             else:
-                answers_rating[answer] -= 1
+                answers_count[answers_rand[i]] -= 1
 
-        for answer, rating in answers_rating.items():
-            if rating != 0:
-                Answer.objects.filter(pk=answer).update(rating=rating)
+        answers = list(Answer.objects.all())
+        for answer in answers:
+            answer.rating = answers_count[answer.pk]
+
+        Answer.objects.bulk_update(answers, ['rating'])
+        print('End updating answers rating')
 
     def handle(self, *args, **options):
-        users_count = options.get('users')
-        tags_count = options.get('tags')
-        questions_count = options.get('questions')
-        answers_count = options.get('answers')
-        like_questions_count = options.get('likes_questions')
-        like_answers_count = options.get('likes_answers')
+        current = [options.get('users'),
+                   options.get('tags'),
+                   options.get('questions'),
+                   options.get('answers'),
+                   options.get('likes_questions'),
+                   options.get('likes_answers')]
 
         if options.get('db_size') == 'test':
-            users_count = test[0]
-            tags_count = test[1]
-            questions_count = test[2]
-            answers_count = test[3]
-            like_questions_count = test[4]
-            like_answers_count = test[5]
+            current = test
         elif options.get('db_size') == 'small':
-            users_count = small[0]
-            tags_count = small[1]
-            questions_count = small[2]
-            answers_count = small[3]
-            like_questions_count = small[4]
-            like_answers_count = small[5]
+            current = small
         elif options.get('db_size') == 'medium':
-            users_count = medium[0]
-            tags_count = medium[1]
-            questions_count = medium[2]
-            answers_count = medium[3]
-            like_questions_count = medium[4]
-            like_answers_count = medium[5]
+            current = medium
         elif options.get('db_size') == 'large':
-            users_count = large[0]
-            tags_count = large[1]
-            questions_count = large[2]
-            answers_count = large[3]
-            like_questions_count = large[4]
-            like_answers_count = large[5]
+            current = large
 
-        self.fill_users(users_count)
-        self.fill_tags(tags_count)
-        self.fill_questions(questions_count)
-        self.fill_answers(answers_count)
-        self.fill_likes_questions(like_questions_count)
-        self.fill_likes_answers(like_answers_count)
+        self.fill_users(current[0])
+        self.fill_tags(current[1])
+        self.fill_questions(current[2])
+        self.fill_answers(current[3])
+        self.fill_likes_questions(current[4])
+        self.fill_likes_answers(current[5])
