@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 def avatar_upload_to(instance, filename):
-    return 'uploads/avatars/{}/{}'.format(instance.user.id, filename)
+    return 'avatars/{}/{}'.format(instance.user.id, filename)
 
 
 class ProfileManager(models.Manager):
@@ -12,9 +12,9 @@ class ProfileManager(models.Manager):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    avatar = models.ImageField(upload_to=avatar_upload_to, verbose_name='Аватар')
-    count = models.IntegerField(default=0, verbose_name='Количество вопросов и ответов у пользователя')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='User')
+    avatar = models.ImageField(default='/avatars/avatar.png', upload_to=avatar_upload_to, verbose_name='Avatar')
+    count = models.IntegerField(default=0, verbose_name='Author rating')
 
     objects = ProfileManager()
 
@@ -22,8 +22,8 @@ class Profile(models.Model):
         return self.user.username
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'Author'
+        verbose_name_plural = 'Authors'
 
 
 class TagManager(models.Manager):
@@ -32,8 +32,8 @@ class TagManager(models.Manager):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name='Имя')
-    count = models.IntegerField(default=0, verbose_name='Количество вопросов по тегу')
+    name = models.CharField(max_length=50, unique=True, verbose_name='Name')
+    count = models.IntegerField(default=1, verbose_name='Number of questions by tag')
 
     objects = TagManager()
 
@@ -41,8 +41,8 @@ class Tag(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
 
 
 class QuestionManager(models.Manager):
@@ -55,17 +55,14 @@ class QuestionManager(models.Manager):
     def tags(self, tag):
         return self.filter(tags__name=tag)
 
-    def question(self, id):
-        return self.filter(id=id)
-
 
 class Question(models.Model):
-    title = models.CharField(max_length=128, verbose_name='Заголовок')
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Автор')
-    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    text = models.TextField(verbose_name='Текст')
-    tags = models.ManyToManyField(Tag, blank=True, verbose_name='Теги')
-    rating = models.IntegerField(default=0, verbose_name='Рейтинг')
+    title = models.CharField(max_length=128, verbose_name='Title')
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Author')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Creation date')
+    text = models.TextField(verbose_name='Text')
+    tags = models.ManyToManyField(Tag, blank=True, verbose_name='Tags')
+    rating = models.IntegerField(default=0, verbose_name='Rating')
 
     objects = QuestionManager()
 
@@ -79,8 +76,8 @@ class Question(models.Model):
         return self.tags.all()
 
     class Meta:
-        verbose_name = 'Вопрос'
-        verbose_name_plural = 'Вопросы'
+        verbose_name = 'Question'
+        verbose_name_plural = 'Questions'
 
 
 class AnswerManager(models.Manager):
@@ -92,12 +89,12 @@ class AnswerManager(models.Manager):
 
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='Вопрос')
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Автор')
-    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    text = models.TextField(verbose_name='Текст')
-    is_correct = models.BooleanField(default=False, verbose_name='Корректность ответа')
-    rating = models.IntegerField(default=0, verbose_name='Рейтинг')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='Question')
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Author')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Creation date')
+    text = models.TextField(verbose_name='Text')
+    is_correct = models.BooleanField(default=False, verbose_name='Is correct answer')
+    rating = models.IntegerField(default=0, verbose_name='Rating')
 
     objects = AnswerManager()
 
@@ -105,31 +102,31 @@ class Answer(models.Model):
         return 'Ответ на вопрос: {}'.format(self.question.title)
 
     class Meta:
-        verbose_name = 'Ответ'
-        verbose_name_plural = 'Ответы'
+        verbose_name = 'Answer'
+        verbose_name_plural = 'Answers'
 
 
 class LikeQuestion(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Пользователь, который поставил отметку')
-    state = models.BooleanField(null=True, verbose_name='Состояние отметки')
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='Вопрос')
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Voted user')
+    state = models.BooleanField(null=True, verbose_name='Vote')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='Question')
 
     def __str__(self):
         return 'Отметка вопроса: {}'.format(self.question.title)
 
     class Meta:
-        verbose_name = 'Отметка вопроса'
-        verbose_name_plural = 'Отметки вопросов'
+        verbose_name = 'Question vote'
+        verbose_name_plural = 'Questions votes'
 
 
 class LikeAnswer(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Пользователь, который поставил отметку')
-    state = models.BooleanField(null=True, verbose_name='Состояние отметки')
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, verbose_name='Ответ')
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Voted user')
+    state = models.BooleanField(null=True, verbose_name='Vote')
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, verbose_name='Answer')
 
     def __str__(self):
         return 'Отметка ответа на вопрос: {}'.format(self.answer.question.title)
 
     class Meta:
-        verbose_name = 'Отметка ответа'
-        verbose_name_plural = 'Отметки ответов'
+        verbose_name = 'Answer vote'
+        verbose_name_plural = 'Answers votes'

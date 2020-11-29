@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block question-avatar %}
-    <img src="{% static "img/quest.png" %}" height="150px" width="150px" class="align-self-start mr-2 rounded-sm"
+    <img src="{{ question.author.avatar.url }}" height="150px" width="150px" class="align-self-start mr-3 rounded-sm"
          alt="...">
 {% endblock question-avatar %}
 

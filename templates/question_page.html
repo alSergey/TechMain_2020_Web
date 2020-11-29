@@ -9,9 +9,7 @@
     </legend>
 
     <div class="mb-5">
-    {% for question in questions %}
         {% include 'inc/question_big.html' %}
-    {% endfor %}
     </div>
 
     {% for answer in answers %}
@@ -20,8 +18,15 @@
 
     {% include 'inc/paginator.html' with page=answers %}
 
-    <form>
-        <textarea class="form-control mr-5 pr-5" id="question" rows="4" placeholder="Enter your answer here"></textarea>
-        <button type="submit" id="confirm" class="btn mt-3 align-content-end btn-primary">Submit</button>
-    </form>
+    <h4>Write you answer</h4>
+
+    {% if request.user.is_authenticated %}
+        {% include 'inc/form.html' %}
+    {% else %}
+        <div>
+            <span class="in">You must be registered to post a reply:</span>
+            <a href="{% url 'singin' %}?next={{ request.path }}">login</a>
+        </div>
+    {% endif %}
+
 {% endblock content %}

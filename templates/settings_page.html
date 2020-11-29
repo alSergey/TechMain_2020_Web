@@ -4,48 +4,18 @@
 
 {% block content %}
 
-    <legend class="mb-3">
+    <legend class="mb-4">
         <h3 class="mr-3">Settings</h3>
     </legend>
 
-    <form>
-        <div class="form-group row">
-            <label for="avatar" class="col-sm-2 col-form-label mt-3"><h5>Photo</h5></label>
-            <div class="col-sm-10 mt-3">
-                <img src="{% static "img/avatar.jpeg" %}" width="100" height="100"
-                     class="dropdown-toggle rounded-circle ml-2" id="avatar"
-                     alt="">
-            </div>
-            <label for="photo" class="col-sm-2 col-form-label mt-3"></label>
-            <div class="col-sm-10 mt-3">
-                <input type="file" class="form-control" id="photo">
-                <label class="custom-file-label" for="photo">Choose file</label>
-            </div>
+    <div class="row mb-5">
+        <label for="avatar" class="col-md-3"><h4>Avatar</h4></label>
+        <div class="col-md-9">
+            <img src="{{ request.user.profile.avatar.url }}" width="100" height="100"
+                 class="dropdown-toggle rounded-circle ml-2" id="avatar" alt="">
         </div>
-        <div class="form-group row">
-            <label for="login" class="col-sm-2 col-form-label mt-3"><h5>Login</h5></label>
-            <div class="col-sm-10 mt-3">
-                <input type="text" class="form-control" id="login">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="email" class="col-sm-2 col-form-label mt-3"><h5>Email</h5></label>
-            <div class="col-sm-10 mt-3">
-                <input type="email" class="form-control" id="email">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="nick" class="col-sm-2 col-form-label mt-3"><h5>NickName</h5></label>
-            <div class="col-sm-10 mt-3">
-                <input type="text" class="form-control" id="nick">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="confirm" class="col-sm-2 col-form-label mt-1"></label>
-            <div class="col-sm-10 mt-1">
-                <button type="submit" id="confirm" class="btn align-content-end btn-primary">Submit</button>
-            </div>
-        </div>
-    </form>
+    </div>
+
+    {% include 'inc/form.html' with file=True %}
 
 {% endblock content %}

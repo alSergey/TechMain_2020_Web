@@ -1,0 +1,13 @@
+{% load bootstrap4 %}
+
+{% if file %}
+    <form method="POST" enctype="multipart/form-data" novalidate>
+{% else %}
+    <form method="POST" novalidate>
+{% endif %}
+{% csrf_token %}
+{% bootstrap_form form layout="horizontal" %}
+{% buttons %}
+    <button type="submit" id="confirm" class="btn align-content-end btn-primary">Submit</button>
+{% endbuttons %}
+</form>

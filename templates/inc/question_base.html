@@ -4,7 +4,7 @@
     <div class="d-flex flex-column bd-highlight mb-3">
 
         {% block question-avatar %}
-            <img src="{% static "img/quest.png" %}" height="95px" width="95px" class="align-self-start mr-2 rounded-sm"
+            <img src="{{ question.author.avatar.url }}" height="95px" width="95px" class="align-self-start mr-3 rounded-sm"
                  alt="...">
         {% endblock question-avatar %}
 

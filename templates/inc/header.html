@@ -12,15 +12,15 @@
             <button class="border-0 bg-transparent my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
         </form>
 
-        {% if user_login == True %}
+        {% if request.user.is_authenticated %}
             <div class="dropdown">
-                <img src="{% static "img/avatar.jpeg" %}" width="40" height="40" class="dropdown-toggle rounded-circle"
+                <img src="{{ request.user.profile.avatar.url }}" width="40" height="40" class="dropdown-toggle rounded-circle"
                      id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="">
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="{% url 'settings' %}">Profile</a>
                     <a class="dropdown-item" href="{% url 'ask' %}">New question</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Exit</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Exit</a>
                 </div>
             </div>
         {% else %}
