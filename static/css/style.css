@@ -32,3 +32,7 @@ code {
 .max-search-width {
     width: 700px !important;
 }
+
+.vote {
+    color: black;
+}

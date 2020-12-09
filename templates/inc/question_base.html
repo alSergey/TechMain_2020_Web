@@ -4,17 +4,32 @@
     <div class="d-flex flex-column bd-highlight mb-3">
 
         {% block question-avatar %}
-            <img src="{{ question.author.avatar.url }}" height="95px" width="95px" class="align-self-start mr-3 rounded-sm"
+            <img src="{{ question.author.avatar.url }}" height="95px" width="95px"
+                 class="align-self-start mr-3 rounded-sm"
                  alt="...">
         {% endblock question-avatar %}
 
         <div class="mt-3 align-self-center">
 
-            <a href="#" class=""><i class="far fa-thumbs-up"></i></a>
             {% block question-raiting %}
-                <span>{{ question.rating }}</span>
+                {% if votes|get_item:question.id == True %}
+                    <a href="#" class="js-vote vote" id="question-like-{{ question.pk }}" data-class="question"
+                       data-action="like" data-id="{{ question.pk }}"><i class="far fa-thumbs-up"></i></a>
+                {% else %}
+                    <a href="#" class="js-vote" id="question-like-{{ question.pk }}" data-class="question"
+                       data-action="like" data-id="{{ question.pk }}"><i class="far fa-thumbs-up"></i></a>
+                {% endif %}
+
+                <span id="question-{{ question.pk }}">{{ question.rating }}</span>
+
+                {% if votes|get_item:question.id == False %}
+                    <a href="#" class="js-vote vote" id="question-dislike-{{ question.pk }}" data-class="question"
+                       data-action="dislike" data-id="{{ question.pk }}"><i class="far fa-thumbs-down"></i></a>
+                {% else %}
+                    <a href="#" class="js-vote" id="question-dislike-{{ question.pk }}" data-class="question"
+                       data-action="dislike" data-id="{{ question.pk }}"><i class="far fa-thumbs-down"></i></a>
+                {% endif %}
             {% endblock question-raiting %}
-            <a href="#" class=""><i class="far fa-thumbs-down"></i></a>
 
         </div>
     </div>

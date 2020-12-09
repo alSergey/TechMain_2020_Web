@@ -3,7 +3,23 @@
 {% load static %}
 
 {% block question-raiting %}
-    <span>{{ answer.rating }}</span>
+    {% if answers_votes|get_item:answer.id == True %}
+        <a href="#" class="js-vote vote" id="answer-like-{{ answer.pk }}" data-class="answer"
+           data-action="like" data-id="{{ question.pk }}"><i class="far fa-thumbs-up"></i></a>
+    {% else %}
+        <a href="#" class="js-vote" id="answer-like-{{ answer.pk }}" data-class="answer"
+           data-action="like" data-id="{{ answer.pk }}"><i class="far fa-thumbs-up"></i></a>
+    {% endif %}
+
+    <span id="answer-{{ answer.pk }}">{{ answer.rating }}</span>
+
+    {% if answers_votes|get_item:answer.id == False %}
+        <a href="#" class="js-vote vote" id="answer-dislike-{{ answer.pk }}" data-class="answer"
+           data-action="dislike" data-id="{{ answer.pk }}"><i class="far fa-thumbs-down"></i></a>
+    {% else %}
+        <a href="#" class="js-vote" id="answer-dislike-{{ answer.pk }}" data-class="answer"
+           data-action="dislike" data-id="{{ answer.pk }}"><i class="far fa-thumbs-down"></i></a>
+    {% endif %}
 {% endblock question-raiting %}
 
 {% block question-text %}
@@ -15,6 +31,22 @@
 {% endblock question-text %}
 
 {% block question-info %}
-    <input class="form-check-input ml-3" type="checkbox" id="answerCheck">
-    <label class="form-check-label ml-5" for="answerCheck">Correct!</label>
+    {% if answer.question.author.id == request.user.profile.id %}
+        {% if answer.is_correct == True %}
+            <input class="js-correct ml-3" id="answer-correct-{{ answer.pk }}" type="checkbox"
+                   data-id="{{ answer.pk }}" checked>
+        {% else %}
+            <input class="js-correct ml-3" id="answer-correct-{{ answer.pk }}" type="checkbox"
+                   data-id="{{ answer.pk }}">
+        {% endif %}
+    {% else %}
+        {% if answer.is_correct == True %}
+            <input class="js-correct ml-3" id="answer-correct-{{ answer.pk }}" type="checkbox"
+                   data-id="{{ answer.pk }}" checked disabled>
+        {% else %}
+            <input class="js-correct ml-3" id="answer-correct-{{ answer.pk }}" type="checkbox"
+                   data-id="{{ answer.pk }}" disabled>
+        {% endif %}
+    {% endif %}
+    <label class="ml-1" for="answer-correct-{{ answer.pk }}">Correct!</label>
 {% endblock question-info %}
