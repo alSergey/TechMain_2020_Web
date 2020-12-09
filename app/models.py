@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 def avatar_upload_to(instance, filename):
-    return 'avatars/{}/{}'.format(instance.user.id, filename)
+    return 'avatars/{}/{}'.format(instance.id, filename)
 
 
 class ProfileManager(models.Manager):
@@ -106,26 +106,48 @@ class Answer(models.Model):
         verbose_name_plural = 'Answers'
 
 
-class LikeQuestion(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Voted user')
+class VoteQuestionManager(models.Manager):
+    def reaction(self, qlist, aid):
+        votes = {}
+        for vote in self.filter(question_id__in=qlist, author_id=aid).all():
+            votes[vote.question.id] = vote.state
+
+        return votes
+
+
+class VoteQuestion(models.Model):
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Voted user')
     state = models.BooleanField(null=True, verbose_name='Vote')
     question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='Question')
 
+    objects = VoteQuestionManager()
+
     def __str__(self):
-        return 'Отметка вопроса: {}'.format(self.question.title)
+        return 'Vote question: {}'.format(self.question.title)
 
     class Meta:
         verbose_name = 'Question vote'
         verbose_name_plural = 'Questions votes'
 
 
-class LikeAnswer(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Voted user')
+class VoteAnswerManager(models.Manager):
+    def reaction(self, alist, aid):
+        votes = {}
+        for vote in self.filter(answer_id__in=alist, author_id=aid).all():
+            votes[vote.answer.id] = vote.state
+
+        return votes
+
+
+class VoteAnswer(models.Model):
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Voted user')
     state = models.BooleanField(null=True, verbose_name='Vote')
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, verbose_name='Answer')
 
+    objects = VoteAnswerManager()
+
     def __str__(self):
-        return 'Отметка ответа на вопрос: {}'.format(self.answer.question.title)
+        return 'Vote answer: {}'.format(self.answer.question.title)
 
     class Meta:
         verbose_name = 'Answer vote'

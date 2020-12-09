@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from app.models import Question, Answer, Tag, Profile, LikeQuestion, LikeAnswer
+from app.models import Question, Answer, Tag, Profile, VoteQuestion, VoteAnswer
 from django.contrib.auth.models import User
 from random import randint, choice, choices
 from itertools import islice
@@ -136,10 +136,10 @@ class Command(BaseCommand):
         questions_rand = choices(questions_id, k=cnt)
         mark_rand = choices([True, True, True, True, False], k=cnt)
         objs = (
-            LikeQuestion(user_id=choice(authors_id), state=mark_rand[i], question_id=questions_rand[i])
+            VoteQuestion(author_id=choice(authors_id), state=mark_rand[i], question_id=questions_rand[i])
             for i in range(cnt)
         )
-        self.bulk_create(LikeQuestion, objs)
+        self.bulk_create(VoteQuestion, objs)
         print('End filling questions likes')
 
         print('Start updating {} questions rating'.format(len(questions_id)))
@@ -167,10 +167,10 @@ class Command(BaseCommand):
         answers_rand = choices(answers_id, k=cnt)
         mark_rand = choices([True, True, True, True, False], k=cnt)
         objs = (
-            LikeAnswer(user_id=choice(authors_id), state=mark_rand[i], answer_id=answers_rand[i])
+            VoteAnswer(author_id=choice(authors_id), state=mark_rand[i], answer_id=answers_rand[i])
             for i in range(cnt)
         )
-        self.bulk_create(LikeAnswer, objs)
+        self.bulk_create(VoteAnswer, objs)
         print('End filling answers likes')
 
         print('Start updating {} answers rating'.format(len(answers_id)))
