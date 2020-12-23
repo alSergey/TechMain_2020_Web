@@ -32,9 +32,11 @@ $('.js-vote').click(function (ev) {
             vote: vote,
         },
     }).done(function (data) {
-        document.getElementById(className + '-' + id).innerHTML = data['rating']
-        if (action !== 'delete') {
-            document.getElementById(className + '-' + vote + '-' + id).classList.add('vote')
+        if (data["rating"] !== undefined) {
+            document.getElementById(className + '-' + id).innerHTML = data['rating']
+            if (action !== 'delete') {
+                document.getElementById(className + '-' + vote + '-' + id).classList.add('vote')
+            }
         }
     })
 
