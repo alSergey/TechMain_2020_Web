@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 def avatar_upload_to(instance, filename):
-    return 'avatars/{}/{}'.format(instance.id, filename)
+    return 'avatars/{}/{}'.format(instance.user.id, filename)
 
 
 class ProfileManager(models.Manager):
