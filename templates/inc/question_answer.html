@@ -2,10 +2,15 @@
 
 {% load static %}
 
+{% block question-avatar %}
+    <img src="{{ answer.author.avatar.url }}" height="95px" width="95px"
+         class="align-self-start mr-3 rounded-sm rounded-circle" alt="avatar">
+{% endblock question-avatar %}
+
 {% block question-raiting %}
     {% if answers_votes|get_item:answer.id == True %}
         <a href="#" class="js-vote vote" id="answer-like-{{ answer.pk }}" data-class="answer"
-           data-action="like" data-id="{{ question.pk }}"><i class="far fa-thumbs-up"></i></a>
+           data-action="like" data-id="{{ answer.pk }}"><i class="far fa-thumbs-up"></i></a>
     {% else %}
         <a href="#" class="js-vote" id="answer-like-{{ answer.pk }}" data-class="answer"
            data-action="like" data-id="{{ answer.pk }}"><i class="far fa-thumbs-up"></i></a>
