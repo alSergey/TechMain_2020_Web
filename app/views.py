@@ -94,7 +94,8 @@ def question(request, id):
         form = AnswerForm(data=request.POST, profile=request.user.profile, question=question)
         if form.is_valid():
             form.save()
-            return redirect(reverse('question', kwargs={'id': id}) + '?page=last')
+            # return redirect(reverse('question', kwargs={'id': id}) + '?page=last')
+            return redirect(reverse('question', kwargs={'id': id}))
 
     else:
         form = AnswerForm(None, None)
