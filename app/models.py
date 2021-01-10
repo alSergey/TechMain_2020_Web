@@ -99,7 +99,7 @@ class Answer(models.Model):
     objects = AnswerManager()
 
     def __str__(self):
-        return 'Ответ на вопрос: {}'.format(self.question.title)
+        return 'Answer for question: {}'.format(self.question.title)
 
     class Meta:
         verbose_name = 'Answer'
