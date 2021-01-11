@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'i%1m*&683e$f@_eks%z5tyzik55e=buibon!b)@1mni-4jgvn&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -77,12 +77,12 @@ WSGI_APPLICATION = 'askme.wsgi.application'
 
 
 # SQLite3 settings
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # PostgreSQL settings
 # DATABASES = {
@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'askme.wsgi.application'
 # }
 
 # Heroku PostgreSQL settings
-DATABASES = {'default': dj_database_url.config(conn_max_age=600, ssl_require=True)}
+# DATABASES = {'default': dj_database_url.config(conn_max_age=600, ssl_require=True)}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -133,14 +133,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / 'static/'
 STATIC_URL = '/static/'
-if DEBUG:
-    STATICFILES_DIRS = [
-        BASE_DIR / "static",
-        '/var/www/static/',
-    ]
-else:
-    STATIC_ROOT = BASE_DIR / 'static/'
+
+# Django server
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+#     '/var/www/static/',
+# ]
 
 MEDIA_ROOT = BASE_DIR / 'uploads/'
 MEDIA_URL = '/uploads/'
