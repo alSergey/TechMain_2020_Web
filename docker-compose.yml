@@ -7,16 +7,8 @@ services:
     ports:
       - "80:8000"
 
-  prometheus:
-    image: prom/prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - $PWD/metrics:/etc/prometheus
-
   node_exporter:
-    image: quay.io/prometheus/node-exporter:latest
-    container_name: node_exporter
+    image: prom/node-exporter
     command:
       - "--path.rootfs=/host"
     ports:
