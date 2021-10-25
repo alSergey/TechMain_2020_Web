@@ -3,9 +3,9 @@ version: "3"
 services:
   django:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn askme.wsgi:application --bind 0.0.0.0:8080
     ports:
-      - "80:8000"
+      - "80:8080"
 
   node_exporter:
     image: prom/node-exporter
